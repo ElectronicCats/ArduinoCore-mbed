@@ -66,6 +66,9 @@ jobs:
       - name: Remove old symlink to api
         run: rm "$GITHUB_WORKSPACE/cores/arduino/api"
 
+      - name: Install Arduino CLI and Tools
+        run: pip3 install --user adafruit-nrfutil
+
       - name: Install ArduinoCore-API
         run: mv "$GITHUB_WORKSPACE/ArduinoCore-API/api" "$GITHUB_WORKSPACE/cores/arduino"   
 
