@@ -64,65 +64,55 @@ void analogAcquisitionTime(uint8_t time)
 
 AnalogPinDescription g_AAnalogPinDescription[] = {
     // A0 - A7
-  { P0_4,  NULL },    // A0
-  { P0_5,  NULL },    // A1
-  { P0_30, NULL },    // A2
-  { P0_29, NULL },    // A3
-  { P0_31, NULL },    // A4/SDA
-  { P0_2,  NULL },    // A5/SCL
-  { P0_28, NULL },    // A6
-  { P0_3,  NULL }     // A7
+  { P0_2,  NULL },    // A0
+  { P0_28, NULL },    // A1
+  { P0_5,  NULL },    // A2
+  { P0_3,  NULL },    // A3
+  { P0_30, NULL },    // A4
+  { P0_29, NULL },    // A5
+  { P0_26, NULL },    // VBAT
 };
 
 PinDescription g_APinDescription[] = {
-  // D0 - D7
-  { P1_3,  NULL, NULL, NULL },     // D0/TX
-  { P1_10, NULL, NULL, NULL },     // D1/RX
-  { P1_11, NULL, NULL, NULL },     // D2
-  { P1_12, NULL, NULL, NULL },     // D3
-  { P1_15, NULL, NULL, NULL },     // D4
-  { P1_13, NULL, NULL, NULL },     // D5
-  { P1_14, NULL, NULL, NULL },     // D6
-  { P0_23, NULL, NULL, NULL },     // D7
 
-  // D8 - D13
-  { P0_21, NULL, NULL, NULL },     // D8
-  { P0_27, NULL, NULL, NULL },     // D9
-  { P1_2,  NULL, NULL, NULL },     // D10
-  { P1_1,  NULL, NULL, NULL },     // D11/MOSI
-  { P1_8,  NULL, NULL, NULL },     // D12/MISO
-  { P0_13, NULL, NULL, NULL },     // D13/SCK/LED
+  // D0 - D8
+  { P0_10, NULL, NULL, NULL },     // D0/TX
+  { P0_9,  NULL, NULL, NULL },     // D1/RX
+  { P1_11, NULL, NULL, NULL },     // D2/SDA
+  { P1_10, NULL, NULL, NULL },     // D3/SCL
+  { P1_0,  NULL, NULL, NULL },     // D4/SCK
+  { P1_2,  NULL, NULL, NULL },     // D5
+  { P1_13, NULL, NULL, NULL },     // D6
+  { P1_6,  NULL, NULL, NULL },     // D7/MOSI
+  { P0_15, NULL, NULL, NULL },     // D8/MISO
 
-  // A0 - A7
-  { P0_4,  NULL, NULL, NULL },     // A0
-  { P0_5,  NULL, NULL, NULL },     // A1
-  { P0_30, NULL, NULL, NULL },     // A2
-  { P0_29, NULL, NULL, NULL },     // A3
-  { P0_31, NULL, NULL, NULL },     // A4/SDA
-  { P0_2,  NULL, NULL, NULL },     // A5/SCL
-  { P0_28, NULL, NULL, NULL },     // A6
-  { P0_3,  NULL, NULL, NULL },     // A7
+  // D9 - D13
+  { P0_6,  NULL, NULL, NULL },     // D9
+  { P1_9,  NULL, NULL, NULL },     // D10
+  { P0_8,  NULL, NULL, NULL },     // D11
+  { P0_4,  NULL, NULL, NULL },     // D12
+  { P0_7,  NULL, NULL, NULL },     // D13
 
-  // LEDs
-  { P0_24, NULL, NULL, NULL },     // LED R
-  { P0_16, NULL, NULL, NULL },     // LED G
-  { P0_6,  NULL, NULL, NULL },     // LED B
-  { P1_9,  NULL, NULL, NULL },     // LED PWR
+  // D14 - LED
+  { P0_24,  NULL, NULL, NULL },     // D14
 
-  { P0_19, NULL, NULL, NULL },     // INT APDS
+  // D15..D21 - A0 - A5
+  { P0_2,  NULL, NULL, NULL },     // A0
+  { P0_28, NULL, NULL, NULL },     // A1
+  { P0_5,  NULL, NULL, NULL },     // A2
+  { P0_3,  NULL, NULL, NULL },     // A3
+  { P0_30, NULL, NULL, NULL },     // A4
+  { P0_29, NULL, NULL, NULL },     // A5
+  { P0_26, NULL, NULL, NULL },     // VBAT
 
-  // PDM
-  { P0_17, NULL, NULL, NULL },     // PDM PWR
-  { P0_26, NULL, NULL, NULL },     // PDM CLK
-  { P0_25, NULL, NULL, NULL },     // PDM DIN
+  // 22..27 - FLASH SPI
 
-  // Internal I2C
-  { P0_14, NULL, NULL, NULL },     // SDA2
-  { P0_15, NULL, NULL, NULL },     // SCL2
-
-  // Internal I2C
-  { P1_0,  NULL, NULL, NULL },     // I2C_PULL
-  { P0_22, NULL, NULL, NULL }     // VDD_ENV_ENABLE
+  { P0_13, NULL, NULL, NULL },     // QSPI_SCK
+  { P0_20, NULL, NULL, NULL },     // QSPI_CS
+  { P0_17, NULL, NULL, NULL },     // QSPI_DATA0
+  { P0_22, NULL, NULL, NULL },     // QSPI_DATA1
+  { P1_4,  NULL, NULL, NULL },     // QSPI_DATA2
+  { P0_12, NULL, NULL, NULL },     // QSPI_DATA3
 };
 
 extern "C" {
@@ -137,33 +127,27 @@ extern "C" {
 
 void initVariant() {
   // turn power LED on
-  pinMode(LED_PWR, OUTPUT);
-  digitalWrite(LED_PWR, HIGH);
+  //pinMode(LED_PWR, OUTPUT);
+  //digitalWrite(LED_PWR, HIGH);
 
   // Errata Nano33BLE - I2C pullup is on SWO line, need to disable TRACE
   // was being enabled by nrfx_clock_anomaly_132
-  CoreDebug->DEMCR = 0;
-  NRF_CLOCK->TRACECONFIG = 0;
+  //CoreDebug->DEMCR = 0;
+  //NRF_CLOCK->TRACECONFIG = 0;
 
   // FIXME: bootloader enables interrupt on COMPARE[0], which we don't handle
   // Disable it here to avoid getting stuck when OVERFLOW irq is triggered
-  nrf_rtc_event_disable(NRF_RTC1, NRF_RTC_INT_COMPARE0_MASK);
-  nrf_rtc_int_disable(NRF_RTC1, NRF_RTC_INT_COMPARE0_MASK);
+  //nrf_rtc_event_disable(NRF_RTC1, NRF_RTC_INT_COMPARE0_MASK);
+  //nrf_rtc_int_disable(NRF_RTC1, NRF_RTC_INT_COMPARE0_MASK);
 
   // FIXME: always enable I2C pullup and power @startup
   // Change for maximum powersave
-  pinMode(PIN_ENABLE_SENSORS_3V3, OUTPUT);
-  pinMode(PIN_ENABLE_I2C_PULLUP, OUTPUT);
+  //pinMode(PIN_ENABLE_SENSORS_3V3, OUTPUT);
+  //pinMode(PIN_ENABLE_I2C_PULLUP, OUTPUT);
 
-  digitalWrite(PIN_ENABLE_SENSORS_3V3, HIGH);
-  digitalWrite(PIN_ENABLE_I2C_PULLUP, HIGH);
-
-  // Disable UARTE0 which is initially enabled by the bootloader
-  nrf_uarte_task_trigger(NRF_UARTE0, NRF_UARTE_TASK_STOPRX); 
-  while (!nrf_uarte_event_check(NRF_UARTE0, NRF_UARTE_EVENT_RXTO)) ; 
-  NRF_UARTE0->ENABLE = 0; 
-  NRF_UART0->ENABLE = 0; 
-
+  //digitalWrite(PIN_ENABLE_SENSORS_3V3, HIGH);
+  //digitalWrite(PIN_ENABLE_I2C_PULLUP, HIGH);
+ 
   NRF_PWM_Type* PWM[] = {
     NRF_PWM0, NRF_PWM1, NRF_PWM2
 #ifdef NRF_PWM3
