@@ -132,3 +132,44 @@ nano33ble.bootloader.config=-f target/nrf52.cfg
 nano33ble.bootloader.programmer=-f interface/cmsis-dap.cfg
 nano33ble.bootloader.file=nano33ble/bootloader.hex
 
+# BAST BLE
+bastble.name=Electronic Cats Bast BLE
+bastble.build.core=arduino
+bastble.build.crossprefix=arm-none-eabi-
+bastble.build.compiler_path={runtime.tools.arm-none-eabi-gcc.path}/bin/
+
+bastble.build.variant=bastble
+bastble.build.mcu=cortex-m4
+bastble.build.extra_flags=
+bastble.build.architecture=cortex-m4
+bastble.build.fpu=fpv4-sp-d16
+bastble.build.float-abi=softfp
+bastble.build.board=bast_ble
+bastble.build.ldscript=linker_script.ld
+bastble.compiler.mbed.arch.define=-DARDUINO_ARCH_NRF52840
+bastble.compiler.mbed.defines={build.variant.path}/defines.txt
+bastble.compiler.mbed.ldflags={build.variant.path}/ldflags.txt
+bastble.compiler.mbed.cflags={build.variant.path}/cflags.txt
+bastble.compiler.mbed.cxxflags={build.variant.path}/cxxflags.txt
+bastble.compiler.mbed.includes={build.variant.path}/includes.txt
+bastble.compiler.mbed.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
+bastble.compiler.mbed="{build.variant.path}/libs/libmbed.a" "{build.variant.path}/libs/libcc_310_core.a" "{build.variant.path}/libs/libcc_310_ext.a" "{build.variant.path}/libs/libcc_310_trng.a"
+bastble.vid.0=0x1209
+bastble.pid.0=0x005a
+bastble.vid.1=0x1209
+bastble.pid.1=0x805a
+
+# Upload
+bastble.bootloader.tool=bootburn
+bastble.upload.tool=nrfutil
+bastble.upload.protocol=nrfutil
+bastble.upload.use_1200bps_touch=true
+bastble.upload.wait_for_upload_port=true
+bastble.upload.maximum_size=983040
+bastble.upload.maximum_data_size=262144
+
+bastble.bootloader.tool=openocd
+bastble.bootloader.extra_action.preflash=nrf5 mass_erase
+bastble.bootloader.config=-f target/nrf52.cfg
+bastble.bootloader.programmer=-f interface/cmsis-dap.cfg
+bastble.bootloader.file=bastble/bast_ble_bootloader-0.3.2.hex
