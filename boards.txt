@@ -169,7 +169,7 @@ bastble.upload.maximum_size=983040
 bastble.upload.maximum_data_size=262144
 
 bastble.bootloader.tool=openocd
-bastble.bootloader.extra_action.preflash=nrf5 mass_erase
+bastble.bootloader.extra_action.preflash=echo INFO:removed_mass-erase
 bastble.bootloader.config=-f target/nrf52.cfg
 bastble.bootloader.programmer=-f interface/cmsis-dap.cfg
 bastble.bootloader.file=bastble/bast_ble_bootloader-0.3.2.hex
