@@ -49,8 +49,8 @@ jobs:
             additional-sketch-paths: '"libraries/doom" "libraries/KernelDebug" "libraries/Portenta_Audio" "libraries/Portenta_SDCARD" "libraries/Portenta_System" "libraries/Portenta_Video" "libraries/ThreadDebug" "libraries/USBHOST"'
           - board:
               fqbn: arduino-beta:mbed:bastble
-            additional-sketch-paths: '"libraries/PDM" "libraries/ThreadDebug"'
-            
+            additional-sketch-paths: '"libraries/ThreadDebug"'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -71,7 +71,7 @@ jobs:
       - name: Remove old symlink to api
         run: rm "$GITHUB_WORKSPACE/cores/arduino/api"
 
-      - name: Install Arduino CLI and Tools
+      - name: Install nrfutil
         run: pip3 install --user adafruit-nrfutil
 
       - name: Install ArduinoCore-API
