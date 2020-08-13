@@ -72,7 +72,7 @@ jobs:
         run: rm "$GITHUB_WORKSPACE/cores/arduino/api"
 
       - name: Install nrfutil
-        run: pip3 install --user adafruit-nrfutil
+        run: pip3 install adafruit-nrfutil
 
       - name: Install ArduinoCore-API
         run: mv "$GITHUB_WORKSPACE/ArduinoCore-API/api" "$GITHUB_WORKSPACE/cores/arduino"   
