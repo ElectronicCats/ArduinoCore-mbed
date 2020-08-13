@@ -138,7 +138,7 @@ bastble.build.core=arduino
 bastble.build.crossprefix=arm-none-eabi-
 bastble.build.compiler_path={runtime.tools.arm-none-eabi-gcc.path}/bin/
 
-bastble.build.variant=bastble
+bastble.build.variant=BASTBLE
 bastble.build.mcu=cortex-m4
 bastble.build.extra_flags=
 bastble.build.architecture=cortex-m4
