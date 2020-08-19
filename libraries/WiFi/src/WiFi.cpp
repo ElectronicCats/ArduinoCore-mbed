@@ -15,6 +15,11 @@ arduino::IPAddress arduino::WiFiClass::ipAddressFromSocketAddress(SocketAddress 
     return IPAddress(address.bytes[0], address.bytes[1], address.bytes[2], address.bytes[3]);    
 }
 
+SocketAddress arduino::WiFiClass::socketAddressFromIpAddress(arduino::IPAddress ip, uint16_t port) {
+    nsapi_addr_t convertedIP = {NSAPI_IPv4, {ip[0], ip[1], ip[2], ip[3]}};    
+    return SocketAddress(convertedIP, port);
+}
+
 int arduino::WiFiClass::begin(const char* ssid, const char *passphrase) {
     if (_ssid) free(_ssid);
 
@@ -197,6 +202,17 @@ uint8_t arduino::WiFiClass::status() {
     return _currentNetworkStatus;
 }
 
+int arduino::WiFiClass::hostByName(const char* aHostname, IPAddress& aResult){
+    SocketAddress socketAddress = SocketAddress();
+    nsapi_error_t returnCode = getNetwork()->gethostbyname(aHostname, &socketAddress);
+    nsapi_addr_t address = socketAddress.get_addr();
+    aResult[0] = address.bytes[0];
+    aResult[1] = address.bytes[1];
+    aResult[2] = address.bytes[2];
+    aResult[3] = address.bytes[3];    
+    return returnCode == NSAPI_ERROR_OK ? 1 : 0;
+}
+
 uint8_t arduino::WiFiClass::encryptionType() {
     return sec2enum(ap_list[connected_ap].get_security());
 }
@@ -256,9 +272,53 @@ unsigned long arduino::WiFiClass::getTime() {
 
 #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
 
+#include "QSPIFBlockDevice.h"
+#include "MBRBlockDevice.h"
+#include "FATFileSystem.h"
+
+QSPIFBlockDevice root(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000);
+mbed::MBRBlockDevice wifi_data(&root, 1);
+mbed::FATFileSystem wifi_data_fs("wlan");
+
+bool firmware_available = false;
+
+extern "C" bool wiced_filesystem_mount() {
+  mbed::MBRBlockDevice::partition(&root, 1, 0x0B, 0, 1024 * 1024 * 8);
+  int err =  wifi_data_fs.mount(&wifi_data);
+  if (err) {
+    Serial.println("Failed to mount filesystem");
+    goto error;
+  }
+
+  DIR *dir;
+  struct dirent *ent;
+  if ((dir = opendir("/wlan")) != NULL) {
+    /* print all the files and directories within directory */
+    while ((ent = readdir(dir)) != NULL) {
+      String fullname = "/wlan/" + String(ent->d_name);
+      if (fullname == "/wlan/4343WA1.BIN") {
+        closedir(dir);
+        firmware_available = true;
+        return true;
+      }
+    }
+    Serial.println("File not found");
+    closedir(dir);
+  }
+error:
+  Serial.println("Please run \"PortentaWiFiFirmwareUpdater\" sketch once");
+  whd_print_logbuffer();
+  while (1) {}
+  return false;
+}
+
 #include "whd_version.h"
 char* arduino::WiFiClass::firmwareVersion() {
-    return WHD_VERSION;
+    if (firmware_available) {
+        return WHD_VERSION;
+    } else {
+        return "v0.0.0";
+    }
 }
 
 arduino::WiFiClass WiFi(WiFiInterface::get_default_instance());
