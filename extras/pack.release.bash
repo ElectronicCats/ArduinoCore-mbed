@@ -28,7 +28,7 @@ cd ../
 PWD=`pwd`
 FOLDERNAME=`basename $PWD`
 THIS_SCRIPT_NAME=`basename $0`
-FILENAME=electroniccats-nRF52-mbed-$VERSION.tar.bz2
+FILENAME=electroniccats-mbed-$VERSION.tar.bz2
 rm -rf $FILENAME
 cd ..
 cp -R $FOLDERNAME mbed

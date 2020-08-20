@@ -1,12 +1,12 @@
 {
 	"name": "Electronic Cats Boards (Mbed OS)",
 	"architecture": "mbed",
-	"version": "%%VERSION%%",
+	"version": "1.0.0",
 	"category": "Contributed",
-	"url": "https://github.com/ElectronicCats/Arduino_Boards_Index/raw/gh-pages/IDE_Board_Manager/%%FILENAME%%",
-	"archiveFileName": "%%FILENAME%%",
-	"checksum": "SHA-256:%%CHECKSUM%%",
-	"size": "%%SIZE%%",
+	"url": "https://github.com/ElectronicCats/Arduino_Boards_Index/raw/gh-pages/IDE_Board_Manager/electroniccats-mbed-1.0.0.tar.bz2",
+	"archiveFileName": "electroniccats-mbed-1.0.0.tar.bz2",
+	"checksum": "SHA-256:8ac214b7db7b73d58ec31a467397a24bd96e88e002a0236e5440a858a2fcb10e",
+	"size": "47040135",
 	"help": {
 		"online": "https://electroniccats.com/"
     },
