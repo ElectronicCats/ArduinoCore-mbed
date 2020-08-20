@@ -4,8 +4,8 @@
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
 
-name=Arduino Mbed OS Boards (nRF52840 / STM32H747)
-version=1.2.2
+name=Electronic Cats Mbed OS Boards
+version=1.0.0
 
 # Compile variables
 # ------------------------
@@ -94,6 +94,9 @@ recipe.objcopy.bin.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf
 ## Create output (hex file)
 recipe.objcopy.hex.pattern="{compiler.path}{compiler.elf2hex.cmd}" {compiler.elf2hex.hex.flags} {compiler.elf2hex.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
 
+## Create dfu package zip file
+recipe.objcopy.zip.pattern="{tools.nrfutil.cmd}" dfu genpkg --dev-type 0x0052 --application "{build.path}/{build.project_name}.hex" "{build.path}/{build.project_name}.zip"
+
 ## Compute size
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
 recipe.size.regex.data=^(?:\.data|\.bss)\s+([0-9]+).*
@@ -161,6 +164,23 @@ tools.dfu-util.cmd=dfu-util
 tools.dfu-util.upload.params.verbose=-d
 tools.dfu-util.upload.params.quiet=
 tools.dfu-util.upload.pattern="{path}/{cmd}" --device {upload.vid}:{upload.pid} -D "{build.path}/{build.project_name}.bin" -a{upload.interface} --dfuse-address={upload.address}:leave
+
+#
+# NRFUTIL
+#
+#***************************************************
+# adafruit-nrfutil for uploading
+# https://github.com/adafruit/Adafruit_nRF52_nrfutil
+# pre-built binaries are provided for macos and windows
+#***************************************************
+
+tools.nrfutil.cmd={runtime.tools.nrfutil-0.5.3post10.path}/adafruit-nrfutil
+tools.nrfutil.cmd.windows={runtime.tools.nrfutil-0.5.3post10.path}/adafruit-nrfutil.exe
+tools.nrfutil.cmd.macosx={runtime.tools.nrfutil-0.5.3post10.path}/adafruit-nrfutil
+
+tools.nrfutil.upload.params.verbose=--verbose
+tools.nrfutil.upload.params.quiet=
+tools.nrfutil.upload.pattern="{cmd}" {upload.verbose} dfu serial -pkg "{build.path}/{build.project_name}.zip" -p {serial.port} -b 115200 --singlebank
 
 #
 # GDB (Debugger)

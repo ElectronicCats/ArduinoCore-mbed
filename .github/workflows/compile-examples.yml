@@ -34,6 +34,7 @@ jobs:
           - fqbn: arduino-beta:mbed:nano33ble
           - fqbn: arduino-beta:mbed:envie_m4
           - fqbn: arduino-beta:mbed:envie_m7
+          - fqbn: arduino-beta:mbed:bastble
 
         # compile only the examples compatible with each board
         include:
@@ -46,10 +47,18 @@ jobs:
           - board:
               fqbn: arduino-beta:mbed:envie_m7
             additional-sketch-paths: '"libraries/doom" "libraries/KernelDebug" "libraries/Portenta_Audio" "libraries/Portenta_SDCARD" "libraries/Portenta_System" "libraries/Portenta_Video" "libraries/ThreadDebug" "libraries/USBHOST"'
+          - board:
+              fqbn: arduino-beta:mbed:bastble
+            additional-sketch-paths: '"libraries/ThreadDebug"'
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
 
       # The source files are in a subfolder of the ArduinoCore-API repository, so it's not possible to clone it directly to the final destination in the core
       - name: Checkout ArduinoCore-API
@@ -61,6 +70,9 @@ jobs:
 
       - name: Remove old symlink to api
         run: rm "$GITHUB_WORKSPACE/cores/arduino/api"
+
+      - name: Install nrfutil
+        run: pip3 install adafruit-nrfutil
 
       - name: Install ArduinoCore-API
         run: mv "$GITHUB_WORKSPACE/ArduinoCore-API/api" "$GITHUB_WORKSPACE/cores/arduino"   
