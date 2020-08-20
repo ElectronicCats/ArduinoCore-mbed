@@ -4,8 +4,8 @@
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
 
-name=Electronic Cats Mbed OS Boards (nRF52840 / STM32H747)
-version=1.2.2
+name=Electronic Cats Mbed OS Boards
+version=1.0.0
 
 # Compile variables
 # ------------------------
@@ -174,7 +174,7 @@ tools.dfu-util.upload.pattern="{path}/{cmd}" --device {upload.vid}:{upload.pid} 
 # pre-built binaries are provided for macos and windows
 #***************************************************
 
-tools.nrfutil.cmd=adafruit-nrfutil
+tools.nrfutil.cmd={runtime.tools.nrfutil-0.5.3post10.path}/adafruit-nrfutil
 tools.nrfutil.cmd.windows={runtime.tools.nrfutil-0.5.3post10.path}/adafruit-nrfutil.exe
 tools.nrfutil.cmd.macosx={runtime.tools.nrfutil-0.5.3post10.path}/adafruit-nrfutil
 
