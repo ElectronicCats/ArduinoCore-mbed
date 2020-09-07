@@ -130,9 +130,9 @@ static const uint8_t SCK1  = PIN_SPI1_SCK ;
 
 // PDM Interfaces
 // ---------------
-#define PIN_PDM_PWR	 (15)
-#define PIN_PDM_CLK	 (16)
-#define PIN_PDM_DIN	 (17)
+#define PIN_PDM_PWR	 (-1)
+#define PIN_PDM_CLK	 (4u)
+#define PIN_PDM_DIN	 (6u)
 
 // These serial port names are intended to allow libraries and architecture-neutral
 // sketches to automatically default to the correct port name for a particular type
