@@ -69,7 +69,7 @@ jobs:
           path: ArduinoCore-API
 
       - name: Remove old symlink to api
-        run: rm "$GITHUB_WORKSPACE/cores/arduino/api"
+        run: rm -rf "$GITHUB_WORKSPACE/cores/arduino/api"
 
       - name: Install nrfutil
         run: pip3 install adafruit-nrfutil
