@@ -71,10 +71,10 @@ jobs:
           fqbn: ${{ matrix.board.fqbn }}
           platforms: |
             # Use Board Manager to install the latest release of Arduino mbed Boards to get the toolchain
-            - name: "arduino-beta:mbed"
+            - name: "electroniccats:mbed"
             # Overwrite the Board Manager installation with the local platform
             - source-path: "./"
-              name: "arduino-beta:mbed"
+              name: "electroniccats:mbed"
           sketch-paths: "${{ env.UNIVERSAL_SKETCH_PATHS }} ${{ matrix.additional-sketch-paths }}"
           verbose: 'false'
           enable-size-deltas-report: true
