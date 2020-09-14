@@ -39,17 +39,8 @@ jobs:
         # compile only the examples compatible with each board
         include:
           - board:
-              fqbn: arduino-beta:mbed:nano33ble
-            additional-sketch-paths: '"libraries/PDM" "libraries/ThreadDebug"'
-          - board:
-              fqbn: arduino-beta:mbed:envie_m4
-            additional-sketch-paths: '"libraries/doom" "libraries/KernelDebug" "libraries/Portenta_SDCARD" "libraries/Portenta_System" "libraries/Portenta_Video" '
-          - board:
-              fqbn: arduino-beta:mbed:envie_m7
-            additional-sketch-paths: '"libraries/doom" "libraries/KernelDebug" "libraries/Portenta_Audio" "libraries/Portenta_SDCARD" "libraries/Portenta_System" "libraries/Portenta_Video" "libraries/ThreadDebug" "libraries/USBHOST"'
-          - board:
               fqbn: arduino-beta:mbed:bastble
-            additional-sketch-paths: '"libraries/ThreadDebug"'
+            additional-sketch-paths: '"libraries/PDM" "libraries/ThreadDebug"'
 
     steps:
       - name: Checkout repository
