@@ -31,15 +31,12 @@ jobs:
 
       matrix:
         board:
-          - fqbn: arduino-beta:mbed:nano33ble
-          - fqbn: arduino-beta:mbed:envie_m4
-          - fqbn: arduino-beta:mbed:envie_m7
-          - fqbn: arduino-beta:mbed:bastble
+          - fqbn: electroniccats:mbed:bastble
 
         # compile only the examples compatible with each board
         include:
           - board:
-              fqbn: arduino-beta:mbed:bastble
+              fqbn: electroniccats:mbed:bastble
             additional-sketch-paths: '"libraries/PDM" "libraries/ThreadDebug"'
 
     steps:
