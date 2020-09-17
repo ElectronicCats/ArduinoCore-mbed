@@ -13,7 +13,7 @@ skip_count = 0
 build_format = '| {:22} | {:30} | {:9} '
 build_separator = '-' * 80
 
-default_boards = [ 'bastble', 'nano33ble']
+default_boards = [ 'bastble']
 
 build_boards = []
 
