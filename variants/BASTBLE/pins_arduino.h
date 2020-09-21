@@ -102,7 +102,7 @@ static const uint8_t A5  = PIN_A5;
 /*
  * SPI Interfaces
  */
-#define SPI_INTERFACES_COUNT 2 //SPI on pins
+#define SPI_INTERFACES_COUNT 1 //SPI on pins
 
 #define PIN_SPI_MISO  (8u)
 #define PIN_SPI_MOSI  (7u)
@@ -114,25 +114,15 @@ static const uint8_t MOSI = PIN_SPI_MOSI;
 static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
 
-#define PIN_SPI1_MISO         (11u)
-#define PIN_SPI1_MOSI         (8u)
-#define PIN_SPI1_SCK          (9u) 
-#define PIN_SPI1_SS           (10u)
-
-static const uint8_t SS1   = PIN_SPI1_SS ;
-static const uint8_t MOSI1 = PIN_SPI1_MOSI ;
-static const uint8_t MISO1 = PIN_SPI1_MISO ;
-static const uint8_t SCK1  = PIN_SPI1_SCK ;
-
 // Wire
 #define PIN_WIRE_SDA        (2u)
 #define PIN_WIRE_SCL        (3u)
 
 // PDM Interfaces
 // ---------------
-#define PIN_PDM_PWR	 (-1)
-#define PIN_PDM_CLK	 (4u)
-#define PIN_PDM_DIN	 (6u)
+#define PIN_PDM_PWR	 (9u)
+#define PIN_PDM_CLK	 (6u)
+#define PIN_PDM_DIN	 (5u)
 
 // These serial port names are intended to allow libraries and architecture-neutral
 // sketches to automatically default to the correct port name for a particular type
@@ -178,10 +168,6 @@ static const uint8_t SCK1  = PIN_SPI1_SCK ;
 #define SPI_MISO			(digitalPinToPinName(PIN_SPI_MISO))
 #define SPI_MOSI			(digitalPinToPinName(PIN_SPI_MOSI))
 #define SPI_SCK				(digitalPinToPinName(PIN_SPI_SCK))
-
-#define SPI1_MISO			(digitalPinToPinName(PIN_SPI1_MISO))
-#define SPI1_MOSI			(digitalPinToPinName(PIN_SPI1_MOSI))
-#define SPI1_SCK			(digitalPinToPinName(PIN_SPI1_SCK))
 
 #define digitalPinToPort(P)		(digitalPinToPinName(P)/33)
 

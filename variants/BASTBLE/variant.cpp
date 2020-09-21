@@ -81,13 +81,13 @@ PinDescription g_APinDescription[] = {
   { P1_11, NULL, NULL, NULL },     // D2/SDA
   { P1_10, NULL, NULL, NULL },     // D3/SCL
   { P1_0,  NULL, NULL, NULL },     // D4/SCK
-  { P1_2,  NULL, NULL, NULL },     // D5
-  { P1_13, NULL, NULL, NULL },     // D6
+  { P1_2,  NULL, NULL, NULL },     // D5/PDM DIN
+  { P1_13, NULL, NULL, NULL },     // D6/PDM CLK
   { P1_6,  NULL, NULL, NULL },     // D7/MOSI
   { P0_15, NULL, NULL, NULL },     // D8/MISO
 
   // D9 - D13
-  { P0_6,  NULL, NULL, NULL },     // D9
+  { P0_6,  NULL, NULL, NULL },     // D9/PDM PWR
   { P1_9,  NULL, NULL, NULL },     // D10
   { P0_8,  NULL, NULL, NULL },     // D11
   { P0_4,  NULL, NULL, NULL },     // D12
