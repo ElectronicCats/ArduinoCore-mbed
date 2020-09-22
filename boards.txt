@@ -22,7 +22,7 @@ bastble.compiler.mbed.includes={build.variant.path}/includes.txt
 bastble.compiler.mbed.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
 bastble.compiler.mbed="{build.variant.path}/libs/libmbed.a" "{build.variant.path}/libs/libcc_310_core.a" "{build.variant.path}/libs/libcc_310_ext.a" "{build.variant.path}/libs/libcc_310_trng.a"
 bastble.vid.0=0x1209
-bastble.pid.0=0x005a
+bastble.pid.0=0x805a
 bastble.vid.1=0x1209
 bastble.pid.1=0x805a
 
