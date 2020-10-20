@@ -4,7 +4,7 @@ The repository contains the Arduino APIs and IDE integration files targeting a g
 
 ## Features Electronic Cats version Vs Arduino Original version
 
-- Support for [Adafruit Bootloader UF2](https://github.com/adafruit/Adafruit_nRF52_Bootloader) only MBR Bootloader (Unsupport SoftDevice)
+- Support for [Adafruit Bootloader UF2](https://github.com/ElectronicCats/Adafruit_nRF52_Bootloader) only MBR Bootloader (Unsupport SoftDevice)
 - Upload firmware via [adafruit-nrfutil](https://github.com/adafruit/Adafruit_nRF52_nrfutil)
 
 ## Nice features from Arduino
