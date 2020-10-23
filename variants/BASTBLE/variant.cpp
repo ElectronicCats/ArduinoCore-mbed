@@ -90,7 +90,7 @@ PinDescription g_APinDescription[] = {
   { P0_6,  NULL, NULL, NULL },     // D9/PDM PWR
   { P1_9,  NULL, NULL, NULL },     // D10
   { P0_8,  NULL, NULL, NULL },     // D11
-  { P0_4,  NULL, NULL, NULL },     // D12
+  { P0_26,  NULL, NULL, NULL },     // D12
   { P0_7,  NULL, NULL, NULL },     // D13
 
   // D14 - LED
@@ -103,7 +103,7 @@ PinDescription g_APinDescription[] = {
   { P0_3,  NULL, NULL, NULL },     // A3
   { P0_30, NULL, NULL, NULL },     // A4
   { P0_29, NULL, NULL, NULL },     // A5
-  { P0_26, NULL, NULL, NULL },     // VBAT
+  { P0_4, NULL, NULL, NULL },     // VBAT
 
   // 22..27 - FLASH SPI
 
