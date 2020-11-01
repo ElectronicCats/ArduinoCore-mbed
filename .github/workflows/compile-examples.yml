@@ -21,11 +21,7 @@ on:
 jobs:
   compile-examples:
     runs-on: ubuntu-latest
-
-    env:
-      # sketch paths to compile (recursive) compatible with all boards
-      #UNIVERSAL_SKETCH_PATHS: '"libraries/Scheduler"'
-
+    
     strategy:
       fail-fast: false
 
@@ -77,7 +73,7 @@ jobs:
             # Overwrite the Board Manager installation with the local platform
             - source-path: "./"
               name: "electroniccats:mbed"
-          sketch-paths: "${{ env.UNIVERSAL_SKETCH_PATHS }} ${{ matrix.additional-sketch-paths }}"
+          sketch-paths: "${{ matrix.additional-sketch-paths }}"
           verbose: 'false'
           enable-size-deltas-report: true
 
