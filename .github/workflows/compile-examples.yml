@@ -75,7 +75,7 @@ jobs:
             # Overwrite the Board Manager installation with the local platform
             - source-path: "./"
               name: "electroniccats:mbed"
-            -source-url: "https://electroniccats.github.io/Arduino_Boards_Index/package_electroniccats_index.json"
+            - source-url: "https://electroniccats.github.io/Arduino_Boards_Index/package_electroniccats_index.json"
           sketch-paths: "${{ env.UNIVERSAL_SKETCH_PATHS }} ${{ matrix.additional-sketch-paths }}"
           verbose: 'false'
           enable-size-deltas-report: true
