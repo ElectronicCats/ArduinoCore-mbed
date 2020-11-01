@@ -24,7 +24,7 @@ jobs:
 
     env:
       # sketch paths to compile (recursive) compatible with all boards
-      UNIVERSAL_SKETCH_PATHS: '"libraries/Scheduler"'
+      #UNIVERSAL_SKETCH_PATHS: '"libraries/Scheduler"'
 
     strategy:
       fail-fast: false
