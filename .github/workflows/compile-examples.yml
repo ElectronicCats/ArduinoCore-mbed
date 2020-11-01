@@ -28,11 +28,15 @@ jobs:
       matrix:
         board:
           - fqbn: electroniccats:mbed:bastble
+          - fqbn: electroniccats:mbed:bast_frontier
 
         # compile only the examples compatible with each board
         include:
           - board:
               fqbn: electroniccats:mbed:bastble
+            additional-sketch-paths: '"libraries/PDM" "libraries/ThreadDebug"'
+          - board:
+              fqbn: electroniccats:mbed:bast_frontier
             additional-sketch-paths: '"libraries/PDM" "libraries/ThreadDebug"'
 
     steps:
