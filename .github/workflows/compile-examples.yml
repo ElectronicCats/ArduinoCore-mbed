@@ -71,6 +71,7 @@ jobs:
           fqbn: ${{ matrix.board.fqbn }}
           platforms: |
             - source-url: "https://electroniccats.github.io/Arduino_Boards_Index/package_electroniccats_index.json"
+              name: "electroniccats:mbed"
             # Use Board Manager to install the latest release of Arduino mbed Boards to get the toolchain
             - name: "electroniccats:mbed"
             # Overwrite the Board Manager installation with the local platform
