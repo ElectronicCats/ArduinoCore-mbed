@@ -71,11 +71,11 @@ jobs:
           fqbn: ${{ matrix.board.fqbn }}
           platforms: |
             # Use Board Manager to install the latest release of Arduino mbed Boards to get the toolchain
-            - name: search electroniccats --additional-urls https://electroniccats.github.io/Arduino_Boards_Index/package_electroniccats_index.json
             - name: "electroniccats:mbed"
             # Overwrite the Board Manager installation with the local platform
             - source-path: "./"
               name: "electroniccats:mbed"
+            -source-url: "https://electroniccats.github.io/Arduino_Boards_Index/package_electroniccats_index.json"
           sketch-paths: "${{ env.UNIVERSAL_SKETCH_PATHS }} ${{ matrix.additional-sketch-paths }}"
           verbose: 'false'
           enable-size-deltas-report: true
