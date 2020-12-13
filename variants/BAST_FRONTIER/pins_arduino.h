@@ -52,6 +52,12 @@ extern "C" unsigned int PINCOUNT_fn();
 #define PIN_LED     (13u)
 #define LED_BUILTIN PIN_LED
 
+#define RFM_RST              (36u)
+#define BUSY                 (37u)
+#define RFM_DIO1             (38u)
+#define RFM_DIO2             (39u)
+#define ANTSW                (40u)
+
 // Analog pins
 // -----------
 #define PIN_A0 (14u)
@@ -97,32 +103,46 @@ static const uint8_t A5  = PIN_A5;
 /*
  * SPI Interfaces
  */
-#define SPI_INTERFACES_COUNT 1 //SPI on pins
+#define SPI_INTERFACES_COUNT 2 //SPI on pins
 
-#define PIN_SPI_MISO  (8u)
-#define PIN_SPI_MOSI  (7u)
-#define PIN_SPI_SCK   (4u)
-#define PIN_SPI_SS    (10u)
+#define PIN_SPI_MISO  (32u)
+#define PIN_SPI_MOSI  (33u)
+#define PIN_SPI_SCK   (34u)
+#define PIN_SPI_SS    (35u)
 
 static const uint8_t SS   = PIN_SPI_SS;   // SPI Slave SS not used. Set here only for reference.
 static const uint8_t MOSI = PIN_SPI_MOSI;
 static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
+/*
+#define PIN_SPI1_MISO  (8u)
+#define PIN_SPI1_MOSI  (7u)
+#define PIN_SPI1_SCK   (4u)
+#define PIN_SPI1_SS    (10u)
+
+static const uint8_t SS1   = PIN_SPI_SS; 
+static const uint8_t MOSI1 = PIN_SPI_MOSI;
+static const uint8_t MISO1 = PIN_SPI_MISO;
+static const uint8_t SCK1  = PIN_SPI_SCK;
+*/
 
 // Wire
-#define PIN_WIRE_SDA        (2u)
-#define PIN_WIRE_SCL        (3u)
+#define PIN_WIRE_SDA        (17u)
+#define PIN_WIRE_SCL        (16u)
+
+#define PIN_WIRE_SDA        (3u)
+#define PIN_WIRE_SCL        (2u)
 
 //Interrups
-#define PIN_INT_APDS (29u)
-#define PIN_INT_LIS3 (30u)
-#define PIN_INT_LSM6 (31u)
+#define PIN_INT_APDS (23u)
+#define PIN_INT_LIS3 (24u)
+#define PIN_INT_LSM6 (25u)
 
 // PDM Interfaces
 // ---------------
-#define PIN_PDM_PWR	 (26u)
-#define PIN_PDM_CLK	 (27u)
-#define PIN_PDM_DIN	 (28u)
+#define PIN_PDM_PWR	 (20u)
+#define PIN_PDM_CLK	 (21u)
+#define PIN_PDM_DIN	 (22u)
 
 // These serial port names are intended to allow libraries and architecture-neutral
 // sketches to automatically default to the correct port name for a particular type
@@ -169,8 +189,12 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 #define SPI_MOSI			(digitalPinToPinName(PIN_SPI_MOSI))
 #define SPI_SCK				(digitalPinToPinName(PIN_SPI_SCK))
 
+//#define SPI1_MISO			(digitalPinToPinName(PIN_SPI1_MISO))
+//#define SPI1_MOSI			(digitalPinToPinName(PIN_SPI1_MOSI))
+//#define SPI1_SCK			(digitalPinToPinName(PIN_SPI1_SCK))
 
-#define digitalPinToPort(P)		(digitalPinToPinName(P)/33)
+
+#define digitalPinToPort(P)		(digitalPinToPinName(P)/24)
 
 uint8_t getUniqueSerialNumber(uint8_t* name);
 void _ontouch1200bps_();

@@ -95,12 +95,12 @@ PinDescription g_APinDescription[] = {
   { P1_4,  NULL, NULL, NULL },     // D13
 
   // D14..D19 - A0 - A5
-  { P0_4,  NULL, NULL, NULL },     // A0
+  { P0_4,  NULL, NULL, NULL },    // A0
   { P0_5, NULL, NULL, NULL },     // A1
-  { P0_2,  NULL, NULL, NULL },     // A2
-  { P0_31,  NULL, NULL, NULL },     // A3_AREF
-  { P0_28, NULL, NULL, NULL },     // A4
-  { P0_29, NULL, NULL, NULL },     // A5
+  { P0_2,  NULL, NULL, NULL },    // A2
+  { P0_31,  NULL, NULL, NULL },   // A3_AREF
+  { P0_28, NULL, NULL, NULL },    // A4
+  { P0_29, NULL, NULL, NULL },    // A5
 
   // 20..25 - FLASH SPI
   { P0_3, NULL, NULL, NULL },     // QSPI_SCK
@@ -116,9 +116,21 @@ PinDescription g_APinDescription[] = {
   { P0_21, NULL, NULL, NULL },     // PDM DIN
 
   // 29..31 - Internal Interrupts
-    { P0_17, NULL, NULL, NULL },     // INT APDS
-    { P0_16, NULL, NULL, NULL },     // INT LIS3MDL
-    { P0_15, NULL, NULL, NULL },     // INT LSM6DS33
+  { P0_17, NULL, NULL, NULL },     // INT APDS
+  { P0_16, NULL, NULL, NULL },     // INT LIS3MDL
+  { P0_15, NULL, NULL, NULL },     // INT LSM6DS33
+  
+  // 32..40 - RADIO LORA SX1262
+  { P1_13, NULL, NULL, NULL },     // CIPO - MISO
+  { P1_12, NULL, NULL, NULL },     // COPI - MOSI
+  { P1_11, NULL, NULL, NULL },     // CLK
+  { P1_10, NULL, NULL, NULL },     // NSS
+  { P1_6, NULL, NULL, NULL },      // NRESET
+  { P1_14, NULL, NULL, NULL },     // BUSY
+  { P1_15, NULL, NULL, NULL },     // DIO1
+  { P1_7, NULL, NULL, NULL },      // DIO2
+//{ NULL, NULL, NULL, NULL },     // DIO3
+  { P1_5, NULL, NULL, NULL },     // ANT_SW
 };
 
 extern "C" {
@@ -132,6 +144,23 @@ extern "C" {
 #include "nrf_uart.h"
 
 void initVariant() { 
+
+  // Errata Nano33BLE - I2C pullup is on SWO line, need to disable TRACE
+  // was being enabled by nrfx_clock_anomaly_132
+  //CoreDebug->DEMCR = 0;
+  //NRF_CLOCK->TRACECONFIG = 0;
+
+  // FIXME: bootloader enables interrupt on COMPARE[0], which we don't handle
+  // Disable it here to avoid getting stuck when OVERFLOW irq is triggered
+  //nrf_rtc_event_disable(NRF_RTC1, NRF_RTC_INT_COMPARE0_MASK);
+  //nrf_rtc_int_disable(NRF_RTC1, NRF_RTC_INT_COMPARE0_MASK);
+
+  // Disable UARTE0 which is initially enabled by the bootloader
+  //nrf_uarte_task_trigger(NRF_UARTE0, NRF_UARTE_TASK_STOPRX); 
+  //while (!nrf_uarte_event_check(NRF_UARTE0, NRF_UARTE_EVENT_RXTO)) ; 
+  //NRF_UARTE0->ENABLE = 0; 
+  //NRF_UART0->ENABLE = 0;
+
   NRF_PWM_Type* PWM[] = {
     NRF_PWM0, NRF_PWM1, NRF_PWM2
 #ifdef NRF_PWM3
