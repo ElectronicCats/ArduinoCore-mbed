@@ -20,16 +20,12 @@
 #ifndef ARDUINO_API_H
 #define ARDUINO_API_H
 
-// version 1.0.0
-#define ARDUINO_API_VERSION 10001
+// version 1.1.0
+#define ARDUINO_API_VERSION 10100
 
 #include "Binary.h"
 
 #ifdef __cplusplus
-#include "Client.h"
-#include "HardwareI2C.h"
-#include "HardwareSPI.h"
-#include "HardwareSerial.h"
 #include "Interrupts.h"
 #include "IPAddress.h"
 #include "Print.h"
