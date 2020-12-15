@@ -67,7 +67,7 @@ public:
     *
     */
     USBSerial(bool connect_blocking = true, const char* name = NULL, uint16_t vendor_id = 0x1f00, uint16_t product_id = 0x2012, uint16_t product_release = 0x0001);
-    
+
     /**
     * Fully featured constructor
     *
