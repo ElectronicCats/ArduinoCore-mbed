@@ -82,7 +82,7 @@ jobs:
               name: "electroniccats:mbed"
           sketch-paths: "${{ matrix.additional-sketch-paths }}"
           verbose: 'false'
-          enable-size-deltas-report: true
+          enable-deltas-report: true
 
       - name: Save memory usage change report as artifact
         if: github.event_name == 'pull_request'
