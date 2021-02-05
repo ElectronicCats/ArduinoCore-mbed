@@ -126,9 +126,6 @@ static const uint8_t MISO1 = PIN_SPI1_MISO;
 static const uint8_t SCK1  = PIN_SPI1_SCK;
 
 // Wire
-#define PIN_WIRE_SDA        (17u)
-#define PIN_WIRE_SCL        (16u)
-
 #define PIN_WIRE_SDA        (3u)
 #define PIN_WIRE_SCL        (2u)
 
