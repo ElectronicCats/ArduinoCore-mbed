@@ -40,3 +40,46 @@ bastble.bootloader.extra_action.preflash=echo INFO:removed_mass-erase
 bastble.bootloader.config=-f target/nrf52.cfg
 bastble.bootloader.programmer=-f interface/cmsis-dap.cfg
 bastble.bootloader.file=bastble/bast_ble_bootloader-0.3.2.hex
+
+##############################################################
+# BAST FRONTIER
+bast_frontier.name=Electronic Cats Bast Frontier
+bast_frontier.build.core=arduino
+bast_frontier.build.crossprefix=arm-none-eabi-
+bast_frontier.build.compiler_path={runtime.tools.arm-none-eabi-gcc.path}/bin/
+
+bast_frontier.build.variant=BAST_FRONTIER
+bast_frontier.build.mcu=cortex-m4
+bast_frontier.build.extra_flags=
+bast_frontier.build.architecture=cortex-m4
+bast_frontier.build.fpu=fpv4-sp-d16
+bast_frontier.build.float-abi=softfp
+bast_frontier.build.board=BAST_FRONTIER
+bast_frontier.build.ldscript=linker_script.ld
+bast_frontier.compiler.mbed.arch.define=-DARDUINO_ARCH_NRF52840
+bast_frontier.compiler.mbed.defines={build.variant.path}/defines.txt
+bast_frontier.compiler.mbed.ldflags={build.variant.path}/ldflags.txt
+bast_frontier.compiler.mbed.cflags={build.variant.path}/cflags.txt
+bast_frontier.compiler.mbed.cxxflags={build.variant.path}/cxxflags.txt
+bast_frontier.compiler.mbed.includes={build.variant.path}/includes.txt
+bast_frontier.compiler.mbed.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
+bast_frontier.compiler.mbed="{build.variant.path}/libs/libmbed.a" "{build.variant.path}/libs/libcc_310_core.a" "{build.variant.path}/libs/libcc_310_ext.a" "{build.variant.path}/libs/libcc_310_trng.a"
+bast_frontier.vid.0=0x1209
+bast_frontier.pid.0=0x805a
+bast_frontier.vid.1=0x1209
+bast_frontier.pid.1=0x805a
+
+# Upload
+bast_frontier.bootloader.tool=bootburn
+bast_frontier.upload.tool=nrfutil
+bast_frontier.upload.protocol=nrfutil
+bast_frontier.upload.use_1200bps_touch=true
+bast_frontier.upload.wait_for_upload_port=true
+bast_frontier.upload.maximum_size=983040
+bast_frontier.upload.maximum_data_size=262144
+
+bast_frontier.bootloader.tool=openocd
+bast_frontier.bootloader.extra_action.preflash=echo INFO:removed_mass-erase
+bast_frontier.bootloader.config=-f target/nrf52.cfg
+bast_frontier.bootloader.programmer=-f interface/cmsis-dap.cfg
+bast_frontier.bootloader.file=bast_frontier/bast_frontier_bootloader-0.3.2.hex
