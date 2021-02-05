@@ -22,18 +22,22 @@ jobs:
   compile-examples:
     runs-on: ubuntu-latest
     
+    env:
+      # sketch paths to compile (recursive) compatible with all boards
+      UNIVERSAL_SKETCH_PATHS: '"libraries/Scheduler"'
+    
     strategy:
       fail-fast: false
 
       matrix:
         board:
-          - fqbn: electroniccats:mbed:bastble
-          - fqbn: electroniccats:mbed:bast_frontier
+        - fqbn: electroniccats:mbed:bastble
+        - fqbn: electroniccats:mbed:bast_frontier
 
         # compile only the examples compatible with each board
         include:
           - board:
-              fqbn: electroniccats:mbed:bastble
+             fqbn: electroniccats:mbed:bastble
             additional-sketch-paths: '"libraries/PDM" "libraries/ThreadDebug"'
           - board:
               fqbn: electroniccats:mbed:bast_frontier
@@ -58,7 +62,7 @@ jobs:
           repository: arduino/ArduinoCore-API
           path: ArduinoCore-API
       
-      - name: Remove old symlink to api	      
+      - name: Remove old symlink to api
         run: rm -rf "$GITHUB_WORKSPACE/cores/arduino/api"
         
       - name: Install ArduinoCore-API
