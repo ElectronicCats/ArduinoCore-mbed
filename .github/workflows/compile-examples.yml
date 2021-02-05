@@ -56,14 +56,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: arduino/ArduinoCore-API
-          ref: namespace_arduino
           path: ArduinoCore-API
 
       - name: Install ArduinoCore-API
         run: mv "$GITHUB_WORKSPACE/ArduinoCore-API/api" "$GITHUB_WORKSPACE/cores/arduino" 
-
-      - name: Install ArduinoCore-API
-        run: mv "$GITHUB_WORKSPACE/ArduinoCore-API/api" "$GITHUB_WORKSPACE/cores/arduino"   
 
       - name: Compile examples
         uses: arduino/actions/libraries/compile-examples@master
