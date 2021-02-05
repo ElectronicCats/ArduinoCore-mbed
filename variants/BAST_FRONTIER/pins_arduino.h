@@ -172,8 +172,8 @@ static const uint8_t SCK1  = PIN_SPI_SCK;
 
 #define SERIAL_CDC			1
 #define HAS_UNIQUE_ISERIAL_DESCRIPTOR
-#define BOARD_VENDORID		0x2341
-#define BOARD_PRODUCTID		0x805a
+#define BOARD_VENDORID		0x1209
+#define BOARD_PRODUCTID		0x805b
 #define BOARD_NAME			"Bast Frontier"
 
 #define DFU_MAGIC_SERIAL_ONLY_RESET   0xb0

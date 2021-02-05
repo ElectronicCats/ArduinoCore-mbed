@@ -43,6 +43,7 @@ bastble.bootloader.file=bastble/bast_ble_bootloader-0.3.2.hex
 
 ##############################################################
 # BAST FRONTIER
+
 bast_frontier.name=Electronic Cats Bast Frontier
 bast_frontier.build.core=arduino
 bast_frontier.build.crossprefix=arm-none-eabi-
@@ -65,9 +66,9 @@ bast_frontier.compiler.mbed.includes={build.variant.path}/includes.txt
 bast_frontier.compiler.mbed.extra_ldflags=-lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
 bast_frontier.compiler.mbed="{build.variant.path}/libs/libmbed.a" "{build.variant.path}/libs/libcc_310_core.a" "{build.variant.path}/libs/libcc_310_ext.a" "{build.variant.path}/libs/libcc_310_trng.a"
 bast_frontier.vid.0=0x1209
-bast_frontier.pid.0=0x805a
+bast_frontier.pid.0=0x805b
 bast_frontier.vid.1=0x1209
-bast_frontier.pid.1=0x805a
+bast_frontier.pid.1=0x805b
 
 # Upload
 bast_frontier.bootloader.tool=bootburn

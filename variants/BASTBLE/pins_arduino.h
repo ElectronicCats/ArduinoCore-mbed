@@ -152,7 +152,7 @@ static const uint8_t SCK  = PIN_SPI_SCK;
 
 #define SERIAL_CDC			1
 #define HAS_UNIQUE_ISERIAL_DESCRIPTOR
-#define BOARD_VENDORID		0x2341
+#define BOARD_VENDORID		0x1209
 #define BOARD_PRODUCTID		0x805a
 #define BOARD_NAME			"Bast BLE"
 
