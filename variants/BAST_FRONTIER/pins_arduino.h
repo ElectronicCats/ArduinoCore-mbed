@@ -103,7 +103,7 @@ static const uint8_t A5  = PIN_A5;
 /*
  * SPI Interfaces
  */
-#define SPI_INTERFACES_COUNT 2 //SPI on pins
+#define SPI_INTERFACES_COUNT 1 //SPI on pins
 
 #define PIN_SPI_MISO  (32u)
 #define PIN_SPI_MOSI  (33u)
@@ -114,17 +114,16 @@ static const uint8_t SS   = PIN_SPI_SS;   // SPI Slave SS not used. Set here onl
 static const uint8_t MOSI = PIN_SPI_MOSI;
 static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
-/*
+
 #define PIN_SPI1_MISO  (8u)
 #define PIN_SPI1_MOSI  (7u)
 #define PIN_SPI1_SCK   (4u)
 #define PIN_SPI1_SS    (10u)
 
-static const uint8_t SS1   = PIN_SPI_SS; 
-static const uint8_t MOSI1 = PIN_SPI_MOSI;
-static const uint8_t MISO1 = PIN_SPI_MISO;
-static const uint8_t SCK1  = PIN_SPI_SCK;
-*/
+static const uint8_t SS1   = PIN_SPI1_SS; 
+static const uint8_t MOSI1 = PIN_SPI1_MOSI;
+static const uint8_t MISO1 = PIN_SPI1_MISO;
+static const uint8_t SCK1  = PIN_SPI1_SCK;
 
 // Wire
 #define PIN_WIRE_SDA        (17u)
@@ -189,9 +188,9 @@ static const uint8_t SCK1  = PIN_SPI_SCK;
 #define SPI_MOSI			(digitalPinToPinName(PIN_SPI_MOSI))
 #define SPI_SCK				(digitalPinToPinName(PIN_SPI_SCK))
 
-//#define SPI1_MISO			(digitalPinToPinName(PIN_SPI1_MISO))
-//#define SPI1_MOSI			(digitalPinToPinName(PIN_SPI1_MOSI))
-//#define SPI1_SCK			(digitalPinToPinName(PIN_SPI1_SCK))
+#define SPI1_MISO			(digitalPinToPinName(PIN_SPI1_MISO))
+#define SPI1_MOSI			(digitalPinToPinName(PIN_SPI1_MOSI))
+#define SPI1_SCK			(digitalPinToPinName(PIN_SPI1_SCK))
 
 
 #define digitalPinToPort(P)		(digitalPinToPinName(P)/24)
