@@ -59,8 +59,8 @@ jobs:
           ref: namespace_arduino
           path: ArduinoCore-API
 
-      - name: Remove old symlink to api
-        run: rm -rf "$GITHUB_WORKSPACE/cores/arduino/api"
+      - name: Install ArduinoCore-API
+        run: mv "$GITHUB_WORKSPACE/ArduinoCore-API/api" "$GITHUB_WORKSPACE/cores/arduino" 
 
       - name: Install ArduinoCore-API
         run: mv "$GITHUB_WORKSPACE/ArduinoCore-API/api" "$GITHUB_WORKSPACE/cores/arduino"   
