@@ -70,6 +70,13 @@ class RPC : public Stream, public rpc::detail::dispatcher {
 		operator bool() {
 			return initialized;
 		}
+		
+	    void attach(void (*fptr)(void))
+	    {
+	        if (fptr != NULL) {
+	            _rx = mbed::Callback<void()>(fptr);
+	        }
+	    }
 
 		template <typename... Args>
     	RPCLIB_MSGPACK::object_handle call(std::string const &func_name,
