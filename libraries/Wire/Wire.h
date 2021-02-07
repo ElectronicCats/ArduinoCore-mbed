@@ -19,6 +19,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include "api/HardwareI2C.h"
 #include "Print.h"
 #include "drivers/I2C.h"
 #include "drivers/I2CSlave.h"
@@ -42,8 +43,8 @@ class MbedI2C : public HardwareI2C
     virtual uint8_t endTransmission(bool stopBit);
     virtual uint8_t endTransmission(void);
 
-    virtual uint8_t requestFrom(uint8_t address, size_t len, bool stopBit);
-    virtual uint8_t requestFrom(uint8_t address, size_t len);
+    virtual size_t requestFrom(uint8_t address, size_t len, bool stopBit);
+    virtual size_t requestFrom(uint8_t address, size_t len);
 
     virtual void onReceive(void(*)(int));
     virtual void onRequest(void(*)(void));

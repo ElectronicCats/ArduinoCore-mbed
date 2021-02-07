@@ -44,22 +44,55 @@ int arduino::WiFiClass::begin(const char* ssid, const char *passphrase) {
 
 int arduino::WiFiClass::beginAP(const char* ssid, const char *passphrase, uint8_t channel) {
 
-#if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
-    _softAP = WhdSoftAPInterface::get_default_instance();
-#endif
+    #if defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4)
+        _softAP = WhdSoftAPInterface::get_default_instance();
+    #endif
 
     if (_softAP == NULL) {
-        return WL_AP_FAILED;
+        return (_currentNetworkStatus = WL_AP_FAILED);
     }
 
     ensureDefaultAPNetworkConfiguration();
 
+    WhdSoftAPInterface* softAPInterface = static_cast<WhdSoftAPInterface*>(_softAP);
+
     //Set ap ssid, password and channel    
-    static_cast<WhdSoftAPInterface*>(_softAP)->set_network(_ip, _netmask, _gateway);
-    nsapi_error_t result = static_cast<WhdSoftAPInterface*>(_softAP)->start(ssid, passphrase, NSAPI_SECURITY_WPA2, channel, true /* dhcp server */, NULL, true /* cohexistance */);
+    softAPInterface->set_network(_ip, _netmask, _gateway);
+    nsapi_error_t result = softAPInterface->start(ssid, passphrase, NSAPI_SECURITY_WPA2, channel, true /* dhcp server */, NULL, true /* cohexistance */);
     
+    nsapi_error_t registrationResult;
+    softAPInterface->unregister_event_handler();
+    registrationResult = softAPInterface->register_event_handler(arduino::WiFiClass::handleAPEvents);
+
+    if (registrationResult != NSAPI_ERROR_OK) {
+        return (_currentNetworkStatus = WL_AP_FAILED);        
+    }
+
     _currentNetworkStatus = (result == NSAPI_ERROR_OK && setSSID(ssid)) ? WL_AP_LISTENING : WL_AP_FAILED;
     return _currentNetworkStatus;
+}
+
+void * arduino::WiFiClass::handleAPEvents(whd_interface_t ifp, const whd_event_header_t *event_header, const uint8_t *event_data, void *handler_user_data){
+    if(event_header->event_type == WLC_E_ASSOC_IND){
+        WiFi._currentNetworkStatus = WL_AP_CONNECTED;        
+    } else if(event_header->event_type == WLC_E_DISASSOC_IND){
+        WiFi._currentNetworkStatus = WL_AP_LISTENING;            
+    }                
+
+    // Default Event Handler
+    whd_driver_t whd_driver = ifp->whd_driver;
+    WHD_IOCTL_LOG_ADD_EVENT(whd_driver, event_header->event_type, event_header->flags, event_header->reason);
+    
+    if ((event_header->event_type == (whd_event_num_t)WLC_E_LINK) || (event_header->event_type == WLC_E_IF)) {
+        if (osSemaphoreGetCount(whd_driver->ap_info.whd_wifi_sleep_flag) < 1) {
+            osStatus_t result = osSemaphoreRelease(whd_driver->ap_info.whd_wifi_sleep_flag);
+            if (result != osOK) {
+                printf("Release whd_wifi_sleep_flag ERROR: %d", result);
+            }
+        }
+    }
+
+    return handler_user_data;    
 }
 
 void arduino::WiFiClass::ensureDefaultAPNetworkConfiguration() {
@@ -80,10 +113,15 @@ void arduino::WiFiClass::end() {
 
 int arduino::WiFiClass::disconnect() {
     if (_softAP != nullptr) {
-        return static_cast<WhdSoftAPInterface*>(_softAP)->stop();        
+        WhdSoftAPInterface* softAPInterface = static_cast<WhdSoftAPInterface*>(_softAP);
+        softAPInterface->unregister_event_handler();
+        _currentNetworkStatus = (softAPInterface->stop() == NSAPI_ERROR_OK ? WL_DISCONNECTED : WL_AP_FAILED);
     } else {
-        return wifi_if->disconnect();
+        wifi_if->disconnect();
+        _currentNetworkStatus = WL_DISCONNECTED;
     }
+    
+    return _currentNetworkStatus;
 }
 
 void arduino::WiFiClass::config(arduino::IPAddress local_ip){    
@@ -282,6 +320,8 @@ unsigned long arduino::WiFiClass::getTime() {
 #include "MBRBlockDevice.h"
 #include "FATFileSystem.h"
 
+#define WIFI_FIRMWARE_PATH "/wlan/4343WA1.BIN"
+
 QSPIFBlockDevice root(PD_11, PD_12, PF_7, PD_13,  PF_10, PG_6, QSPIF_POLARITY_MODE_1, 40000000);
 mbed::MBRBlockDevice wifi_data(&root, 1);
 mbed::FATFileSystem wifi_data_fs("wlan");
@@ -289,10 +329,12 @@ mbed::FATFileSystem wifi_data_fs("wlan");
 bool firmware_available = false;
 
 extern "C" bool wiced_filesystem_mount() {
-  mbed::MBRBlockDevice::partition(&root, 1, 0x0B, 0, 1024 * 1024 * 8);
+  mbed::MBRBlockDevice::partition(&root, 1, 0x0B, 0, 1024 * 1024);
   int err =  wifi_data_fs.mount(&wifi_data);
   if (err) {
-    Serial.println("Failed to mount filesystem");
+    Serial.println("Failed to mount the filesystem containing the WiFi firmware.");
+    Serial.println("Usually that means that the WiFi firmware has not been installed yet"
+                    " or was overwritten with another firmware.");
     goto error;
   }
 
@@ -302,7 +344,7 @@ extern "C" bool wiced_filesystem_mount() {
     /* print all the files and directories within directory */
     while ((ent = readdir(dir)) != NULL) {
       String fullname = "/wlan/" + String(ent->d_name);
-      if (fullname == "/wlan/4343WA1.BIN") {
+      if (fullname == WIFI_FIRMWARE_PATH) {
         closedir(dir);
         firmware_available = true;
         return true;
@@ -312,7 +354,7 @@ extern "C" bool wiced_filesystem_mount() {
     closedir(dir);
   }
 error:
-  Serial.println("Please run \"PortentaWiFiFirmwareUpdater\" sketch once");
+  Serial.println("Please run the \"PortentaWiFiFirmwareUpdater\" sketch once to install the WiFi firmware.");
   whd_print_logbuffer();
   while (1) {}
   return false;

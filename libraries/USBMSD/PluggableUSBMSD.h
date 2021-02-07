@@ -19,9 +19,12 @@
 #define USBMSD_H
 
 /* These headers are included for child class. */
+#include "Arduino.h"
 #include "USBDescriptor.h"
 #include "USBDevice_Types.h"
 #include "platform/Callback.h"
+#include "drivers/internal/PolledQueue.h"
+#include "drivers/internal/Task.h"
 #include "BlockDevice.h"
 #include "Mutex.h"
 
@@ -30,6 +33,12 @@
 #include "FATFileSystem.h"
 #include "Callback.h"
 #include "rtos/Thread.h"
+
+#if defined(MBED_CONF_TARGET_USB_SPEED) && (MBED_CONF_TARGET_USB_SPEED == USE_USB_OTG_HS)
+#define MSD_MAX_PACKET_SIZE    512
+#else
+#define MSD_MAX_PACKET_SIZE    64
+#endif
 
 namespace arduino {
 
@@ -251,15 +260,17 @@ private:
     // endpoints
     usb_ep_t _bulk_in;
     usb_ep_t _bulk_out;
-    uint8_t _bulk_in_buf[64];
-    uint8_t _bulk_out_buf[64];
+    uint8_t _bulk_in_buf[MSD_MAX_PACKET_SIZE];
+    uint8_t _bulk_out_buf[MSD_MAX_PACKET_SIZE];
     bool _out_ready;
     bool _in_ready;
     uint32_t _bulk_out_size;
 
     // Interrupt to thread deferral
-    mbed::Callback<void()> _in_task;
-    mbed::Callback<void()> _out_task;
+    events::PolledQueue _queue;
+    rtos::EventFlags _data_available;
+    events::Task<void()> _in_task;
+    events::Task<void()> _out_task;
     mbed::Callback<void()> _reset_task;
     mbed::Callback<void()> _control_task;
     mbed::Callback<void()> _configure_task;
@@ -270,6 +281,13 @@ private:
 
     // space for config descriptor
     uint8_t _configuration_descriptor[32];
+
+    /*
+    * Get string product version
+    *
+    * Every module must declare a different number
+    */
+    virtual uint8_t getProductVersion();
 
     virtual const uint8_t *string_iproduct_desc();
     virtual const uint8_t *string_iinterface_desc();

@@ -18,6 +18,7 @@
 #ifndef USB_HID_H
 #define USB_HID_H
 
+#include "Arduino.h"
 /* These headers are included for child class. */
 #include "USBDescriptor.h"
 #include "USBDevice.h"
@@ -161,6 +162,13 @@ protected:
     * @returns the length of the report descriptor
     */
     virtual uint16_t report_desc_length();
+
+    /*
+    * Get string product version
+    *
+    * Every module must declare a different number
+    */
+    virtual uint8_t getProductVersion();
 
     /*
     * Get string product descriptor

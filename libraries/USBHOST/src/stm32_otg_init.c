@@ -388,7 +388,6 @@ static void tusb_otg_core_init(tusb_core_t* core)
     set_io_af_mode( OTG_HS_ULPI_CK );
     
     NVIC_SetPriority(OTG_HS_IRQn, 0);
-
     //NVIC_DisableIRQ(OTG_HS_IRQn);
 
     NVIC_SetVector(OTG_HS_IRQn, (uint32_t)&OTG_HS_IRQHandler);

@@ -70,7 +70,7 @@ class RPC : public Stream, public rpc::detail::dispatcher {
 		operator bool() {
 			return initialized;
 		}
-		
+
 	    void attach(void (*fptr)(void))
 	    {
 	        if (fptr != NULL) {
@@ -119,6 +119,7 @@ class RPC : public Stream, public rpc::detail::dispatcher {
 		rtos::Thread* eventThread;
 		rtos::Thread* dispatcherThread;
 		RPCLIB_MSGPACK::unpacker pac_;
+		mbed::Callback<void()> _rx;
 
 		//rpc::detail::response response;
 		RPCLIB_MSGPACK::object_handle call_result;

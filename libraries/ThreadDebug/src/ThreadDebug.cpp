@@ -71,10 +71,12 @@ static const char* g_threadNamesToIgnore[] = {
 #define EXC_RETURN_THREADMODE_MAINSTACK     0x9
 
 // Macro to make is easier to calculate array size.
+#undef ARRAY_SIZE
 #define ARRAY_SIZE(X) (sizeof(X)/sizeof(X[0]))
 
 // Assert routine that will dump error text to USB GDB connection before entering infinite loop. If user is logging MRI
 // remote communications then they will see the error text in the log before debug stub becomes unresponseive.
+#undef ASSERT
 #define ASSERT(X) \
     if (!(X)) { \
         Serial.print("Assertion Failed: "); \
@@ -699,9 +701,9 @@ static const char g_memoryMapXml[] = "<?xml version=\"1.0\"?>"
                                      "<memory-map>"
 #ifndef CORE_CM4
                                      "<memory type=\"ram\" start=\"0x00000000\" length=\"0x10000\"> </memory>"
-                                     "<memory type=\"flash\" start=\"0x08000000\" length=\"0x200000\"> <property name=\"blocksize\">0x20000</property></memory>"
-#endif                                     
                                      "<memory type=\"ram\" start=\"0x10000000\" length=\"0x48000\"> </memory>"
+#endif
+                                     "<memory type=\"flash\" start=\"0x08000000\" length=\"0x200000\"> <property name=\"blocksize\">0x20000</property></memory>"
                                      "<memory type=\"ram\" start=\"0x1ff00000\" length=\"0x20000\"> </memory>"
                                      "<memory type=\"ram\" start=\"0x20000000\" length=\"0x20000\"> </memory>"
                                      "<memory type=\"ram\" start=\"0x24000000\" length=\"0x80000\"> </memory>"
@@ -714,7 +716,7 @@ static const char g_memoryMapXml[] = "<?xml version=\"1.0\"?>"
                                      "<memory type=\"ram\" start=\"0x58026000\" length=\"0x800\"> </memory>"
                                      "<memory type=\"ram\" start=\"0x58027000\" length=\"0x400\"> </memory>"
                                      "<memory type=\"flash\" start=\"0x90000000\" length=\"0x10000000\"> <property name=\"blocksize\">0x200</property></memory>"
-#ifndef CORE_CM4                                     
+#ifndef CORE_CM4
                                      "<memory type=\"ram\" start=\"0xc0000000\" length=\"0x800000\"> </memory>"
 #endif
                                      "</memory-map>";
@@ -1150,7 +1152,6 @@ void UartDebugCommInterface::onReceivedData()
 }
 
 #ifdef SERIAL_CDC
-
 UsbDebugCommInterface::UsbDebugCommInterface(arduino::USBSerial* pSerial) :
     _pSerial(pSerial)
 {
@@ -1189,10 +1190,10 @@ void UsbDebugCommInterface::attach(void (*pCallback)())
 
 #if defined(STM32H747xx) && defined(CORE_CM4)
 
-RPCDebugCommInterface::RPCDebugCommInterface(arduino::RPC* pSerial) :
+RPCDebugCommInterface::RPCDebugCommInterface(arduino::SerialRPCClass* pSerial) :
     _pSerial(pSerial)
 {
-    _pSerial->begin();
+    //_pSerial->begin();
 }
 
 RPCDebugCommInterface::~RPCDebugCommInterface()
