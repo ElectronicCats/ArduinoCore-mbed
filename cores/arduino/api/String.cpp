@@ -20,19 +20,35 @@
 */
 
 #include "String.h"
+#include "Common.h"
 #include "itoa.h"
 #include "deprecated-avr-comp/avr/dtostrf.h"
+
+#include <float.h>
+
+namespace arduino {
+
+/*********************************************/
+/*  Static Member Initialisation             */
+/*********************************************/
+
+size_t const String::FLT_MAX_DECIMAL_PLACES;
+size_t const String::DBL_MAX_DECIMAL_PLACES;
 
 /*********************************************/
 /*  Constructors                             */
 /*********************************************/
 
-namespace arduino {
-
 String::String(const char *cstr)
 {
 	init();
 	if (cstr) copy(cstr, strlen(cstr));
+}
+
+String::String(const char *cstr, unsigned int length)
+{
+	init();
+	if (cstr) copy(cstr, length);
 }
 
 String::String(const String &value)
@@ -111,15 +127,19 @@ String::String(unsigned long value, unsigned char base)
 
 String::String(float value, unsigned char decimalPlaces)
 {
+	static size_t const FLOAT_BUF_SIZE = FLT_MAX_10_EXP + FLT_MAX_DECIMAL_PLACES + 1 /* '-' */ + 1 /* '.' */ + 1 /* '\0' */;
 	init();
-	char buf[33];
+	char buf[FLOAT_BUF_SIZE];
+	decimalPlaces = min(decimalPlaces, FLT_MAX_DECIMAL_PLACES);
 	*this = dtostrf(value, (decimalPlaces + 2), decimalPlaces, buf);
 }
 
 String::String(double value, unsigned char decimalPlaces)
 {
+	static size_t const DOUBLE_BUF_SIZE = DBL_MAX_10_EXP + DBL_MAX_DECIMAL_PLACES + 1 /* '-' */ + 1 /* '.' */ + 1 /* '\0' */;
 	init();
-	char buf[33];
+	char buf[DOUBLE_BUF_SIZE];
+	decimalPlaces = min(decimalPlaces, DBL_MAX_DECIMAL_PLACES);
 	*this = dtostrf(value, (decimalPlaces + 2), decimalPlaces, buf);
 }
 
@@ -178,7 +198,8 @@ String & String::copy(const char *cstr, unsigned int length)
 		return *this;
 	}
 	len = length;
-	strcpy(buffer, cstr);
+	memcpy(buffer, cstr, length);
+	buffer[len] = '\0';
 	return *this;
 }
 
@@ -198,8 +219,9 @@ void String::move(String &rhs)
 {
 	if (buffer) {
 		if (rhs && capacity >= rhs.len) {
-			strcpy(buffer, rhs.buffer);
+			memcpy(buffer, rhs.buffer, rhs.len);
 			len = rhs.len;
+			buffer[len] = '\0';
 			rhs.len = 0;
 			return;
 		} else {
@@ -270,8 +292,9 @@ unsigned char String::concat(const char *cstr, unsigned int length)
 	if (!cstr) return 0;
 	if (length == 0) return 1;
 	if (!reserve(newlen)) return 0;
-	strcpy(buffer + len, cstr);
+	memcpy(buffer + len, cstr, length);
 	len = newlen;
+	buffer[len] = '\0';
 	return 1;
 }
 
@@ -283,59 +306,56 @@ unsigned char String::concat(const char *cstr)
 
 unsigned char String::concat(char c)
 {
-	char buf[2];
-	buf[0] = c;
-	buf[1] = 0;
-	return concat(buf, 1);
+	return concat(&c, 1);
 }
 
 unsigned char String::concat(unsigned char num)
 {
 	char buf[1 + 3 * sizeof(unsigned char)];
 	itoa(num, buf, 10);
-	return concat(buf, strlen(buf));
+	return concat(buf);
 }
 
 unsigned char String::concat(int num)
 {
 	char buf[2 + 3 * sizeof(int)];
 	itoa(num, buf, 10);
-	return concat(buf, strlen(buf));
+	return concat(buf);
 }
 
 unsigned char String::concat(unsigned int num)
 {
 	char buf[1 + 3 * sizeof(unsigned int)];
 	utoa(num, buf, 10);
-	return concat(buf, strlen(buf));
+	return concat(buf);
 }
 
 unsigned char String::concat(long num)
 {
 	char buf[2 + 3 * sizeof(long)];
 	ltoa(num, buf, 10);
-	return concat(buf, strlen(buf));
+	return concat(buf);
 }
 
 unsigned char String::concat(unsigned long num)
 {
 	char buf[1 + 3 * sizeof(unsigned long)];
 	ultoa(num, buf, 10);
-	return concat(buf, strlen(buf));
+	return concat(buf);
 }
 
 unsigned char String::concat(float num)
 {
 	char buf[20];
 	char* string = dtostrf(num, 4, 2, buf);
-	return concat(string, strlen(string));
+	return concat(string);
 }
 
 unsigned char String::concat(double num)
 {
 	char buf[20];
 	char* string = dtostrf(num, 4, 2, buf);
-	return concat(string, strlen(string));
+	return concat(string);
 }
 
 unsigned char String::concat(const __FlashStringHelper * str)
@@ -364,7 +384,7 @@ StringSumHelper & operator + (const StringSumHelper &lhs, const String &rhs)
 StringSumHelper & operator + (const StringSumHelper &lhs, const char *cstr)
 {
 	StringSumHelper &a = const_cast<StringSumHelper&>(lhs);
-	if (!cstr || !a.concat(cstr, strlen(cstr))) a.invalidate();
+	if (!cstr || !a.concat(cstr)) a.invalidate();
 	return a;
 }
 
@@ -448,7 +468,7 @@ int String::compareTo(const String &s) const
 int String::compareTo(const char *cstr) const
 {
 	if (!buffer || !cstr) {
-		if (cstr && !*cstr) return 0 - *(unsigned char *)cstr;
+		if (cstr && *cstr) return 0 - *(unsigned char *)cstr;
 		if (buffer && len > 0) return *(unsigned char *)buffer;
 		return 0;
 	}
@@ -615,10 +635,7 @@ String String::substring(unsigned int left, unsigned int right) const
 	String out;
 	if (left >= len) return out;
 	if (right > len) right = len;
-	char temp = buffer[right];  // save the replaced character
-	buffer[right] = '\0';	
-	out = buffer + left;  // pointer arithmetic
-	buffer[right] = temp;  //restore character
+	out.copy(buffer + left, right - left);
 	return out;
 }
 
@@ -646,17 +663,22 @@ void String::replace(const String& find, const String& replace)
 			readFrom = foundAt + replace.len;
 		}
 	} else if (diff < 0) {
-		char *writeTo = buffer;
+		unsigned int size = len; // compute size needed for result
 		while ((foundAt = strstr(readFrom, find.buffer)) != NULL) {
-			unsigned int n = foundAt - readFrom;
-			memcpy(writeTo, readFrom, n);
-			writeTo += n;
-			memcpy(writeTo, replace.buffer, replace.len);
-			writeTo += replace.len;
 			readFrom = foundAt + find.len;
-			len += diff;
+			diff = 0 - diff;
+			size -= diff;
 		}
-		strcpy(writeTo, readFrom);
+		if (size == len) return;
+		int index = len - 1;
+		while (index >= 0 && (index = lastIndexOf(find, index)) >= 0) {
+			readFrom = buffer + index + find.len;
+			memmove(readFrom - diff, readFrom, len - (readFrom - buffer));
+			len -= diff;
+			buffer[len] = 0;
+			memcpy(buffer + index, replace.buffer, replace.len);
+			index--;
+		}
 	} else {
 		unsigned int size = len; // compute size needed for result
 		while ((foundAt = strstr(readFrom, find.buffer)) != NULL) {
