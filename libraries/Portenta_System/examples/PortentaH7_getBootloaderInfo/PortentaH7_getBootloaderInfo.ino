@@ -4,9 +4,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   while (!Serial) {}
-}
 
-void loop() {
   // put your main code here, to run repeatedly:
   Serial.println("Validation: " + String(bootloader_data[0], HEX));
   Serial.println("BL version: " + String(bootloader_data[1]));
@@ -18,5 +16,8 @@ void loop() {
   Serial.println("QSPI size: " + String(bootloader_data[7]));
   Serial.println("Video: " + String(bootloader_data[8]));
   Serial.println("Crypto: " + String(bootloader_data[9]));
+}
+
+void loop() {
   delay(1000);
 }
